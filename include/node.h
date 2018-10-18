@@ -13,7 +13,7 @@ enum class NodeType
 
 /**
  * @brief The BaseNode struct
- * A base class to represent all literals.
+ * A base class to represent both operators and operands.
  */
 struct BaseNode
 {
@@ -28,7 +28,7 @@ struct BaseNode
 
     BaseNode(NodeType type);
 
-    // When building an AST we need to assign each literal a weight.
+    // When building an AST we need to assign each token a weight.
     // Returns the weight for this type of node
     unsigned getWeight() const;
     // Starting from this node iterate the linked list and find the node with the lowest weight
@@ -62,8 +62,8 @@ using BaseNodePtr = std::unique_ptr<BaseNode>;
  */
 struct ComplexOperand : public BaseNode
 {
-    // A storage of the member literals
-    std::deque<BaseNodePtr> innerLiterals;
+    // A storage of the member tokens
+    std::deque<BaseNodePtr> innerNodes;
 
     ComplexOperand();
 

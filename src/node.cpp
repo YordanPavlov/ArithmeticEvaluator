@@ -205,13 +205,13 @@ bool typesMatchOrder(const BaseNode* nodeLeft, const BaseNode* nodeRight)
 
 BaseNode* ComplexOperand::addMemberNode(BaseNodePtr&& operand)
 {
-    if(!innerLiterals.empty())
+    if(!innerNodes.empty())
     {
-        innerLiterals.back()->rightNode = operand.get();
-        operand->leftNode = innerLiterals.back().get();
+        innerNodes.back()->rightNode = operand.get();
+        operand->leftNode = innerNodes.back().get();
     }
 
-    if(innerLiterals.empty())
+    if(innerNodes.empty())
     {
         if((NodeType::SIMPLE != operand->type) &&
            (NodeType::COMPLEX != operand->type))
@@ -221,37 +221,37 @@ BaseNode* ComplexOperand::addMemberNode(BaseNodePtr&& operand)
     }
     else
     {
-        if(!typesMatchOrder(innerLiterals.back().get(), operand.get()))
+        if(!typesMatchOrder(innerNodes.back().get(), operand.get()))
         {
             throw std::runtime_error( "The order or literals is not met.");
         }
     }
 
-    innerLiterals.emplace_back(std::move(operand));
+    innerNodes.emplace_back(std::move(operand));
 
-    return innerLiterals.back().get();
+    return innerNodes.back().get();
 }
 
 void ComplexOperand::endBracketParsed()
 {
-    if(innerLiterals.empty())
+    if(innerNodes.empty())
     {
         throw std::runtime_error( "Empty brackets are not supported.");
     }
-    else if(!innerLiterals.back()->isOperand())
+    else if(!innerNodes.back()->isOperand())
     {
-        throw std::runtime_error( "Last literal in expression is not an operand.");
+        throw std::runtime_error( "Last token in expression is not an operand.");
     }
 }
 
 BaseNode* ComplexOperand::treeifyComplex()
 {
-    if(innerLiterals.empty())
+    if(innerNodes.empty())
     {
         throw std::runtime_error( "Empty brackets are not supported.");
     }
 
-    return innerLiterals.front()->treeify();
+    return innerNodes.front()->treeify();
 }
 
 } // namespace parser
