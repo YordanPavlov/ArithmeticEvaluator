@@ -4,7 +4,7 @@ project(evaluator)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-SET (SRCS src/node.cpp src/parser.cpp)
+SET (SRCS src/node.cpp src/parser.cpp src/utils.cpp)
 
 include(cmake/FindCppUnit.cmake)
 include(cmake/CMakeIntegrateCPPUnit.cmake)

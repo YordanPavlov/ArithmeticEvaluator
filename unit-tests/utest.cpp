@@ -171,6 +171,36 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EvaluatorTest );
       CPPUNIT_ASSERT( 0 == rootNode->solve());
   }
 
+  void EvaluatorTest::testComplex6()
+  {
+      std::string line = "  (4 + 5 * (7 - 3)) - 2";
+
+      Parser parser;
+      parser.parseInput(line);
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::SUB == rootNode->type);
+      CPPUNIT_ASSERT( 22 == rootNode->solve());
+  }
+
+  void EvaluatorTest::testComplex7()
+  {
+      std::string line = "4+5+7/2";
+
+      Parser parser;
+      parser.parseInput(line);
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::ADD == rootNode->type);
+      CPPUNIT_ASSERT( 12.5 == rootNode->solve());
+  }
+
    void EvaluatorTest::testTypo1()
   {
       std::string line = "( 1 + x)) = 1";
@@ -356,6 +386,160 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EvaluatorTest );
       CPPUNIT_FAIL("Expected exception was not thrown");
   }
 
+  void EvaluatorTest::testTypo12()
+  {
+      std::string line = "1 / 5 +";
+
+      std::string expectedStr("Last token in expression is not an operand.");
+      Parser parser;
+      try
+      {
+        parser.parseInput(line);
+      }
+      catch(std::runtime_error& ex)
+      {
+          CPPUNIT_ASSERT(expectedStr == ex.what());
+          return;
+      }
+      CPPUNIT_FAIL("Expected exception was not thrown");
+  }
+
+  void EvaluatorTest::testTypo13()
+  {
+      std::string line = "test";
+
+      std::string expectedStr("Unexpected character t");
+      Parser parser;
+      try
+      {
+        parser.parseInput(line);
+      }
+      catch(std::runtime_error& ex)
+      {
+          CPPUNIT_ASSERT(expectedStr == ex.what());
+          return;
+      }
+      CPPUNIT_FAIL("Expected exception was not thrown");
+  }
+
+  void EvaluatorTest::testDivZero1()
+  {
+      std::string line = "5 / 0";
+
+      std::string expectedStr("Division by zero.");
+      Parser parser;
+
+      parser.parseInput(line);
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::DIV == rootNode->type);
+      try
+      {
+        rootNode->solve();
+      }
+      catch(std::runtime_error& ex)
+      {
+          CPPUNIT_ASSERT(expectedStr == ex.what());
+          return;
+      }
+      CPPUNIT_FAIL("Expected exception was not thrown");
+  }
+
+  void EvaluatorTest::testDivZero2()
+  {
+      std::string line = "5 / ( 5 -5 )";
+
+      std::string expectedStr("Division by zero.");
+      Parser parser;
+      parser.parseInput(line);
+
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::DIV == rootNode->type);
+      try
+      {
+        rootNode->solve();
+      }
+      catch(std::runtime_error& ex)
+      {
+          CPPUNIT_ASSERT(expectedStr == ex.what());
+          return;
+      }
+      CPPUNIT_FAIL("Expected exception was not thrown");
+  }
+
+  void EvaluatorTest::testDivZero3()
+  {
+      std::string line = "5 / ( 0 * 5 )";
+
+      std::string expectedStr("Division by zero.");
+      Parser parser;
+      parser.parseInput(line);
+
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::DIV == rootNode->type);
+      try
+      {
+        rootNode->solve();
+      }
+      catch(std::runtime_error& ex)
+      {
+          CPPUNIT_ASSERT(expectedStr == ex.what());
+          return;
+      }
+      CPPUNIT_FAIL("Expected exception was not thrown");
+  }
+
+  void EvaluatorTest::testOverflow1()
+  {
+    std::string line = "9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+     9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*\
+9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9";
+
+    Parser parser;
+    parser.parseInput(line);
+
+    const BaseNodePtr& parentOperand = parser.getResult();
+
+    CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+    ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+    BaseNode* rootNode = complex->treeifyComplex();
+    CPPUNIT_ASSERT( NodeType::MUL == rootNode->type);
+
+    std::string expectedStr("Too big values. Integer overflow.");
+    try
+    {
+      rootNode->solve();
+    }
+    catch(std::runtime_error& ex)
+    {
+        CPPUNIT_ASSERT(expectedStr == ex.what());
+        return;
+    }
+    CPPUNIT_FAIL("Expected exception was not thrown");
+  }
 
 int main( int, char **)
 {

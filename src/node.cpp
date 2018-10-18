@@ -2,6 +2,7 @@
 #include <cstring>
 
 #include "node.h"
+#include "utils.h"
 
 namespace parser
 {
@@ -165,11 +166,11 @@ double BaseNode::solve()
         switch(type)
         {
             case NodeType::SUB:
-                return leftValue - rightValue;
+                return safeSubtract(leftValue, rightValue);
             case NodeType::ADD:
-                return leftValue + rightValue;
+                return safeAdd(leftValue, rightValue);
             case NodeType::MUL:
-                return leftValue * rightValue;
+                return safeMul(leftValue, rightValue);
             case NodeType::DIV:
             {
                 if(0 == rightValue)
@@ -248,7 +249,7 @@ BaseNode* ComplexOperand::treeifyComplex()
 {
     if(innerNodes.empty())
     {
-        throw std::runtime_error( "Empty brackets are not supported.");
+        throw std::runtime_error( "Expression is empty.");
     }
 
     return innerNodes.front()->treeify();

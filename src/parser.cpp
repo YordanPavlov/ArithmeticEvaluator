@@ -67,9 +67,20 @@ void Parser::parseInput(const std::string& input)
 
       unsigned index = 0;
 
+      ComplexOperand* pRaw = static_cast<ComplexOperand*>(result.get());
+
       parseInputRec(input,
                     index,
-                    *(static_cast<ComplexOperand*>(result.get())));
+                    *pRaw);
+
+      if(pRaw->innerNodes.empty())
+      {
+          throw std::runtime_error("Expression is empty.");
+      }
+      else if(!pRaw->innerNodes.back()->isOperand())
+      {
+          throw std::runtime_error( "Last token in expression is not an operand.");
+      }
 
       if(index < input.size())
       {

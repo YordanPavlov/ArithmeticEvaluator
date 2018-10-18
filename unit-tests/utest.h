@@ -20,6 +20,8 @@ class EvaluatorTest : public CppUnit::TestFixture  {
   CPPUNIT_TEST( testComplex3 );
   CPPUNIT_TEST( testComplex4 );
   CPPUNIT_TEST( testComplex5 );
+  CPPUNIT_TEST( testComplex6 );
+  CPPUNIT_TEST( testComplex7 );
 
   CPPUNIT_TEST(testTypo1);
   CPPUNIT_TEST(testTypo2);
@@ -31,6 +33,14 @@ class EvaluatorTest : public CppUnit::TestFixture  {
   CPPUNIT_TEST(testTypo9);
   CPPUNIT_TEST(testTypo10);
   CPPUNIT_TEST(testTypo11);
+  CPPUNIT_TEST(testTypo12);
+  CPPUNIT_TEST(testTypo13);
+
+  CPPUNIT_TEST(testDivZero1);
+  CPPUNIT_TEST(testDivZero2);
+  CPPUNIT_TEST(testDivZero3);
+
+  CPPUNIT_TEST(testOverflow1);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -50,6 +60,8 @@ public:
   void testComplex3();
   void testComplex4();
   void testComplex5();
+  void testComplex6();
+  void testComplex7();
 
   void testTypo1();
   void testTypo2();
@@ -61,5 +73,13 @@ public:
   void testTypo9();
   void testTypo10();
   void testTypo11();
+  void testTypo12();
+  void testTypo13();
+
+  void testDivZero1();
+  void testDivZero2();
+  void testDivZero3();
+
+  void testOverflow1();
 };
 
