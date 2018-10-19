@@ -288,6 +288,25 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EvaluatorTest );
       CPPUNIT_FAIL("Expected exception was not thrown");
   }
 
+  void EvaluatorTest::testTypo4()
+  {
+      std::string line = "( 5 * 6";
+
+      std::string expectedStr("Missing closing bracket");
+
+      try
+      {
+          Parser parser;
+          parser.parseInput(line);
+      }
+      catch(std::runtime_error& ex)
+      {
+          CPPUNIT_ASSERT(expectedStr == ex.what());
+          return;
+      }
+      CPPUNIT_FAIL("Expected exception was not thrown");
+  }
+
   void EvaluatorTest::testTypo5()
   {
       std::string line = "1 + -2";

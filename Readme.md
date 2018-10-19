@@ -5,6 +5,13 @@ A parser and evaluator for simple arithmetic expressions. Supported operators ar
 Supported operands are single digit numbers from 0 to 9 along with other nested expressions in
 parentheses.
 
+## Dependencies
+
+The project depends on the CPPUnit library for unit testing and the Readline library to provide
+an user friendly input console. The project has been developed and tested on Ubuntu linux on
+which the needed packages are called libcppunit-dev and libreadline-dev. Those packages should
+installed before running the cmake step described below.
+
 ## Install
 
 * Clone the project.
