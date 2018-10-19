@@ -204,7 +204,7 @@ bool typesMatchOrder(const BaseNode* nodeLeft, const BaseNode* nodeRight)
     return nodeLeft->isOperand() != nodeRight->isOperand();
 }
 
-BaseNode* ComplexOperand::addMemberNode(BaseNodePtr&& operand)
+BaseNode& ComplexOperand::addMemberNode(BaseNodePtr&& operand)
 {
     if(!innerNodes.empty())
     {
@@ -230,7 +230,7 @@ BaseNode* ComplexOperand::addMemberNode(BaseNodePtr&& operand)
 
     innerNodes.emplace_back(std::move(operand));
 
-    return innerNodes.back().get();
+    return *innerNodes.back();
 }
 
 void ComplexOperand::endBracketParsed()

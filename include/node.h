@@ -67,8 +67,15 @@ struct ComplexOperand : public BaseNode
 
     ComplexOperand();
 
-    // Upon parsing, add a new member node
-    BaseNode* addMemberNode(BaseNodePtr&& operand);
+    /**
+     * @brief addMemberNode
+     * Upon parsing, add a new member node
+     * @param operand
+     * The newly parsed node to be added
+     * @return
+     * Returns a reference to the newly inserted node.
+     */
+    BaseNode& addMemberNode(BaseNodePtr&& operand);
     // Signal that the end bracket has been parsed. Used to validate logic.
     void endBracketParsed();
 

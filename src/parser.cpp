@@ -9,16 +9,16 @@ namespace parser
 
 void Parser::parseInputRec(const std::string& input,
                         unsigned& index,
-                        ComplexOperand &parentOperand)
+                        ComplexOperand& parentOperand)
 {
     for(; index<input.size(); ++index)
     {
         if('(' == input[index])
         {
-            BaseNode* newOperand = parentOperand.addMemberNode(BaseNodePtr(new ComplexOperand()));
+            BaseNode& newOperand = parentOperand.addMemberNode(BaseNodePtr(new ComplexOperand()));
             parseInputRec(input,
                           ++index,
-                          *(static_cast<ComplexOperand*>(newOperand)));
+                          static_cast<ComplexOperand&>(newOperand));
         }
         else if(')' == input[index])
         {
@@ -50,8 +50,8 @@ void Parser::parseInputRec(const std::string& input,
             // Depend on the ascii table ordering of symbols
             double number = input[index] - '0';
 
-            BaseNode* newOperand = parentOperand.addMemberNode(BaseNodePtr(new BaseNode(NodeType::SIMPLE)));
-            newOperand->simpleData = number;
+            BaseNode& newOperand = parentOperand.addMemberNode(BaseNodePtr(new BaseNode(NodeType::SIMPLE)));
+            newOperand.simpleData = number;
         }
         else
         {   std::stringstream errorMsg;
