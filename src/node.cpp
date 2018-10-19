@@ -26,9 +26,9 @@ unsigned BaseNode::getWeight() const
 {
     switch(type)
     {
-        case NodeType::SUB:
-            return 1;
         case NodeType::ADD:
+            return 1;
+        case NodeType::SUB:
             return 2;
         case NodeType::MUL:
             return 3;
@@ -54,7 +54,7 @@ BaseNode* BaseNode::getNodeWithLowestWeight()
           iter != nullptr;
           iter = iter->rightNode)
     {
-        if (iter->getWeight() < rootNode->getWeight())
+        if (iter->getWeight() <= rootNode->getWeight())
         {
             rootNode = iter;
         }

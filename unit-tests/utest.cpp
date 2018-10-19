@@ -201,6 +201,36 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EvaluatorTest );
       CPPUNIT_ASSERT( 12.5 == rootNode->solve());
   }
 
+  void EvaluatorTest::testComplex8()
+  {
+      std::string line = "(1-2*2+(2*3))";
+
+      Parser parser;
+      parser.parseInput(line);
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::ADD == rootNode->type);
+      CPPUNIT_ASSERT( 3 == rootNode->solve());
+  }
+
+  void EvaluatorTest::testComplex9()
+  {
+      std::string line = " 1 - 2 *  2 + 2*3";
+
+      Parser parser;
+      parser.parseInput(line);
+      const BaseNodePtr& parentOperand = parser.getResult();
+
+      CPPUNIT_ASSERT( NodeType::COMPLEX == parentOperand->type );
+      ComplexOperand* complex = static_cast<ComplexOperand*>(parentOperand.get());
+      BaseNode* rootNode = complex->treeifyComplex();
+      CPPUNIT_ASSERT( NodeType::ADD == rootNode->type);
+      CPPUNIT_ASSERT( 3 == rootNode->solve());
+  }
+
    void EvaluatorTest::testTypo1()
   {
       std::string line = "( 1 + x)) = 1";

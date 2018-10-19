@@ -22,6 +22,8 @@ class EvaluatorTest : public CppUnit::TestFixture  {
   CPPUNIT_TEST( testComplex5 );
   CPPUNIT_TEST( testComplex6 );
   CPPUNIT_TEST( testComplex7 );
+  CPPUNIT_TEST( testComplex8 );
+  CPPUNIT_TEST( testComplex9 );
 
   CPPUNIT_TEST(testTypo1);
   CPPUNIT_TEST(testTypo2);
@@ -62,6 +64,8 @@ public:
   void testComplex5();
   void testComplex6();
   void testComplex7();
+  void testComplex8();
+  void testComplex9();
 
   void testTypo1();
   void testTypo2();
