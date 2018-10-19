@@ -9,19 +9,23 @@ namespace parser
 
 void Parser::parseInputRec(const std::string& input,
                         unsigned& index,
+                        int& openBracketsCount,
                         ComplexOperand& parentOperand)
 {
     for(; index<input.size(); ++index)
     {
         if('(' == input[index])
         {
+            ++openBracketsCount;
             BaseNode& newOperand = parentOperand.addMemberNode(BaseNodePtr(new ComplexOperand()));
             parseInputRec(input,
                           ++index,
+                          openBracketsCount,
                           static_cast<ComplexOperand&>(newOperand));
         }
         else if(')' == input[index])
         {
+            --openBracketsCount;
             parentOperand.endBracketParsed();
             return;
         }
@@ -65,12 +69,14 @@ void Parser::parseInput(const std::string& input)
 {
       result.reset(new ComplexOperand());
 
-      unsigned index = 0;
-
       ComplexOperand* pRaw = static_cast<ComplexOperand*>(result.get());
+
+      unsigned index = 0;
+      int openBracketsCount = 0;
 
       parseInputRec(input,
                     index,
+                    openBracketsCount,
                     *pRaw);
 
       if(pRaw->innerNodes.empty())
@@ -81,10 +87,13 @@ void Parser::parseInput(const std::string& input)
       {
           throw std::runtime_error( "Last token in expression is not an operand.");
       }
-
+      else if(openBracketsCount != 0)
+      {
+          throw std::runtime_error("Misplaced closing parentheses");
+      }
       if(index < input.size())
       {
-           throw std::runtime_error("Misplaced closing parentheses");
+          throw std::runtime_error("Misplaced closing parentheses");
       }
 }
 

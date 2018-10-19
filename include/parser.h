@@ -18,6 +18,7 @@ private:
 
     void parseInputRec(const std::string& input,
                             unsigned& index,
+                            int& openBracketsCount,
                             ComplexOperand& parentOperand);
 public:
     // Parse a single line of equation to be calculated as read on the console

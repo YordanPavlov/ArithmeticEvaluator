@@ -292,7 +292,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( EvaluatorTest );
   {
       std::string line = "( 5 * 6";
 
-      std::string expectedStr("Missing closing bracket");
+      std::string expectedStr("Misplaced closing parentheses");
 
       try
       {
